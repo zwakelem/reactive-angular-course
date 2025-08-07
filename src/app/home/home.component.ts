@@ -16,6 +16,7 @@ import { HttpClient } from "@angular/common/http";
 
 import { CourseDialogComponent } from "../course-dialog/course-dialog.component";
 import { CoursesService } from "../services/courses.service";
+import { LoadigService } from "../services/loading.service";
 
 @Component({
   selector: "home",
@@ -28,16 +29,21 @@ export class HomeComponent implements OnInit {
 
   advancedCourses$: Observable<Course[]>;
 
-  constructor(private cousersService: CoursesService) {}
+  constructor(
+    private cousersService: CoursesService,
+    private loadingService: LoadigService
+  ) {}
 
   ngOnInit() {
     this.reload();
   }
 
   reload() {
-    const courses$ = this.cousersService
-      .loadAllCourses()
-      .pipe(map((courses) => courses.sort(sortCoursesBySeqNo)));
+    this.loadingService.loadingOn();
+    const courses$ = this.cousersService.loadAllCourses().pipe(
+      map((courses) => courses.sort(sortCoursesBySeqNo)),
+      finalize(() => this.loadingService.loadingOff())
+    );
 
     // courses$.subscribe((val) => console.log(val));
 

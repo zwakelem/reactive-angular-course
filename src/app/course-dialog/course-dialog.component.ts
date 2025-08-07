@@ -14,6 +14,7 @@ import moment from "moment";
 import { catchError } from "rxjs/operators";
 import { throwError } from "rxjs";
 import { CoursesService } from "../services/courses.service";
+import { LoadigService } from "../services/loading.service";
 
 @Component({
   selector: "course-dialog",
@@ -30,7 +31,8 @@ export class CourseDialogComponent implements AfterViewInit {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<CourseDialogComponent>,
     @Inject(MAT_DIALOG_DATA) course: Course,
-    private courseService: CoursesService
+    private courseService: CoursesService,
+    private loadingService: LoadigService
   ) {
     this.course = course;
 
