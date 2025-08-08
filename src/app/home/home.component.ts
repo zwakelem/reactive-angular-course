@@ -1,22 +1,12 @@
 import { Component, OnInit } from "@angular/core";
+import { Observable, throwError } from "rxjs";
+import { catchError, map } from "rxjs/operators";
 import { Course, sortCoursesBySeqNo } from "../model/course";
-import { interval, noop, Observable, of, throwError, timer } from "rxjs";
-import {
-  catchError,
-  delay,
-  delayWhen,
-  filter,
-  finalize,
-  map,
-  retryWhen,
-  shareReplay,
-  tap,
-} from "rxjs/operators";
-import { HttpClient } from "@angular/common/http";
 
-import { CourseDialogComponent } from "../course-dialog/course-dialog.component";
 import { CoursesService } from "../services/courses.service";
-import { LoadigService } from "../services/loading.service";
+import { LoadingService } from "../services/loading.service";
+import { MessagesService } from "../services/messages.service";
+import { CoursesStore } from "../services/courses.store";
 
 @Component({
   selector: "home",
@@ -30,8 +20,10 @@ export class HomeComponent implements OnInit {
   advancedCourses$: Observable<Course[]>;
 
   constructor(
-    private cousersService: CoursesService,
-    private loadingService: LoadigService
+    // private cousersService: CoursesService,
+    // private loadingService: LoadigService,
+    // private messagesService: MessagesService,
+    private coursesStore: CoursesStore
   ) {}
 
   ngOnInit() {
@@ -39,11 +31,21 @@ export class HomeComponent implements OnInit {
   }
 
   reload() {
-    this.loadingService.loadingOn();
+    this.beginnerCourses$ = this.coursesStore.filterByCategory("BEGINNER");
+    this.advancedCourses$ = this.coursesStore.filterByCategory("ADVANCED");
+
+    /*
     const courses$ = this.cousersService.loadAllCourses().pipe(
       map((courses) => courses.sort(sortCoursesBySeqNo)),
-      finalize(() => this.loadingService.loadingOff())
+      catchError((err) => {
+        const message = "Could not load courses";
+        this.messagesService.showErrors(message);
+        console.log(message, err);
+        return throwError(err);
+      })
     );
+
+    const loadCourses$ = this.loadingService.showLoaderUntilCompleted(courses$);
 
     // courses$.subscribe((val) => console.log(val));
 
@@ -54,5 +56,6 @@ export class HomeComponent implements OnInit {
     this.advancedCourses$ = courses$.pipe(
       map((courses) => courses.filter((cou) => cou.category == "ADVANCED"))
     );
+    */
   }
 }

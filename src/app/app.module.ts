@@ -37,6 +37,9 @@ import { MessagesComponent } from "./messages/messages.component";
 import { SearchLessonsComponent } from "./search-lessons/search-lessons.component";
 import { LoadingComponent } from "./loading/loading.component";
 import { CoursesCardListComponent } from "./courses-card-list/courses-card-list.component";
+import { CommonModule } from "@angular/common";
+import { LoadingService } from "./services/loading.service";
+import { MessagesService } from "./services/messages.service";
 
 @NgModule({
   declarations: [
@@ -76,7 +79,12 @@ import { CoursesCardListComponent } from "./courses-card-list/courses-card-list.
     MatDatepickerModule,
     MatMomentDateModule,
     ReactiveFormsModule,
+    CommonModule,
   ],
-  providers: [provideHttpClient(withInterceptorsFromDi())],
+  providers: [
+    LoadingService,
+    MessagesService,
+    provideHttpClient(withInterceptorsFromDi()),
+  ],
 })
 export class AppModule {}
