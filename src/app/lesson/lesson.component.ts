@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, input, OnInit } from "@angular/core";
+import { Lesson } from "../model/lesson";
 
 @Component({
-    selector: 'lesson',
-    templateUrl: './lesson.component.html',
-    styleUrls: ['./lesson.component.css'],
-    standalone: false
+  selector: "lesson",
+  templateUrl: "./lesson.component.html",
+  styleUrls: ["./lesson.component.css"],
+  standalone: false,
 })
-export class LessonComponent  {
-
-
+export class LessonComponent {
+  @Input()
+  lesson: Lesson;
 }
