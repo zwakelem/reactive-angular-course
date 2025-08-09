@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, throwError } from "rxjs";
+import { Observable } from "rxjs";
+import { map, shareReplay } from "rxjs/operators";
 import { Course } from "../model/course";
-import { delay, map, shareReplay } from "rxjs/operators";
 import { Lesson } from "../model/lesson";
 
 @Injectable({
@@ -10,6 +10,26 @@ import { Lesson } from "../model/lesson";
 })
 export class CoursesService {
   constructor(private http: HttpClient) {}
+
+  loadCourseById(courseId: number): Observable<Course> {
+    return this.http
+      .get<Course>(`/api/courses/${courseId}`)
+      .pipe(shareReplay());
+  }
+
+  loadAllCoursesLessons(courseId: number): Observable<Lesson[]> {
+    return this.http
+      .get<Lesson[]>("/api/lessons", {
+        params: {
+          pageSize: "100000",
+          courseId: courseId.toString(),
+        },
+      })
+      .pipe(
+        map((res) => res["payload"]),
+        shareReplay()
+      );
+  }
 
   loadAllCourses(): Observable<Course[]> {
     /*console.log("ERROR loading courses!");

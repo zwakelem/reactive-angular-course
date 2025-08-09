@@ -1,11 +1,7 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable, throwError } from "rxjs";
-import { catchError, map } from "rxjs/operators";
-import { Course, sortCoursesBySeqNo } from "../model/course";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
+import { Course } from "../model/course";
 
-import { CoursesService } from "../services/courses.service";
-import { LoadingService } from "../services/loading.service";
-import { MessagesService } from "../services/messages.service";
 import { CoursesStore } from "../services/courses.store";
 
 @Component({
@@ -13,6 +9,7 @@ import { CoursesStore } from "../services/courses.store";
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.css"],
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
   beginnerCourses$: Observable<Course[]>;
